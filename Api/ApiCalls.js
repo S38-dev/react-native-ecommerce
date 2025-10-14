@@ -1,5 +1,5 @@
 import { setItem } from "../Utils/AsyncStorage"
-
+import { nanoid } from 'nanoid/non-secure';
 export const Login=async (email,password)=>{
       const res = await fetch('https://dummyjson.com/auth/login', {
           method: 'POST',
@@ -24,3 +24,26 @@ export const Login=async (email,password)=>{
         return data
 
 }
+
+export const loadMore = async (limit, off) => {
+  const res = await fetch(`https://dummyjson.com/products?limit=${limit}&skip=${off}`);
+  const json = await res.json();
+  const productsWithHeight = json.products.map(p => ({
+    ...p,
+    cardHeight: Math.floor(Math.random() * 80) + 170,
+    key: nanoid(),
+  }));
+  return productsWithHeight;
+};
+
+
+export const searchProduct = async (input) => {
+  const res =await fetch(`https://dummyjson.com/products/search?q=${input}`)
+  const json = await res.json();
+  const productsWithHeight = json.products.map(p => ({
+    ...p,
+    cardHeight: Math.floor(Math.random() * 80) + 170,
+    key: nanoid(),
+  }));
+  return productsWithHeight;
+};

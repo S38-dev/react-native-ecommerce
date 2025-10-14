@@ -3,7 +3,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import Cart from '../screens/Cart';
 import { Svg, Path } from 'react-native-svg';
-import ProductListing from '../screens/ProductListing';
+import ProductListing from '../screens/ProductListingNew';
 import { useSelector } from 'react-redux';
 
 const Drawer = createDrawerNavigator();
