@@ -123,7 +123,7 @@ const authSlice = createSlice({
         console.log('product')
         state.loadingMore = false;
         
-        state.searchProduct = [...state.products, ...action.payload];
+           state.searchProduct = [...action.payload];
       })
       .addCase(Search.rejected, (state, action) => {
         console.log('loadMoreProduct rejected:', action.payload, action.error);
