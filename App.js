@@ -20,6 +20,8 @@ export default function App() {
         <Provider store={store}>
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
+                
+                        <Stack.Screen name='login' component={Login}/>
                 <Stack.Screen name="ProductListing" component={ProductListing} />
                 <Stack.Screen name="ProductDetails" component={ProductDetails} />
                 {/* <Stack.Screen name='register' component={Register}/> */}
@@ -32,7 +34,7 @@ export default function App() {
                         </AuthWrapper>
                     )}
                 </Stack.Screen>
-                 <Stack.Screen name='login' component={Login}/>
+         
 
                 
                 <Stack.Screen name="Profile">

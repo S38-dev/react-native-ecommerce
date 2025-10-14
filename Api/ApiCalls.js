@@ -18,6 +18,8 @@ export const Login=async (email,password)=>{
 
         console.log(data.accessToken)
         await setItem('token', data.accessToken)
+        await setItem('id', data.id)
+        await setItem('user',data)
 
         return data
 

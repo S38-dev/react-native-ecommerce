@@ -3,7 +3,7 @@ import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 const CartScreen = () => {
-  // Mock cart data
+  
   const cartData = {
     products: [
       {
@@ -58,19 +58,18 @@ const CartScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
+  
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Shopping Bag</Text>
         <Text style={styles.itemCount}>{cartData.products.length} items</Text>
       </View>
 
-      {/* Cart Items */}
       <ScrollView style={styles.cartItems} showsVerticalScrollIndicator={false}>
         {cartData.products.map((item) => (
           <CartItem key={item.id} item={item} />
         ))}
         
-        {/* Promo Code Section */}
+      
         <View style={styles.promoSection}>
           <View style={styles.promoInput}>
             <Text style={styles.promoText}>Picero Coals</Text>
@@ -81,7 +80,7 @@ const CartScreen = () => {
         </View>
       </ScrollView>
 
-      {/* Footer - Order Summary */}
+      
       <View style={styles.footer}>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Subtotal</Text>
@@ -98,8 +97,8 @@ const CartScreen = () => {
           <Text style={styles.totalValue}>${cartData.total.toFixed(2)}</Text>
         </View>
 
-        {/* Checkout Button */}
-        <TouchableOpacity style={styles.checkoutButton}>
+
+        <TouchableOpacity style={styles.checkoutButton} >
           <Text style={styles.checkoutText}>Proceed To Checkout</Text>
         </TouchableOpacity>
       </View>

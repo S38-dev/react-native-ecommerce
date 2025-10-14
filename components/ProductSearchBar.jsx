@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet } from 'react-native';
-// import { MagnifyingGlassIcon } from 'react-native-heroicons/outline'; // optional icon library
+// import { MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
@@ -20,6 +20,7 @@ const SearchBar = ({ onSearch }) => {
         clearButtonMode="while-editing"
         textAlignVertical="center"
       />
+      <Profile/>
     </View>
   );
 };
