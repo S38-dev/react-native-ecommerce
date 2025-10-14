@@ -2,7 +2,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useState } from 'react';
 import { FlatList, Image, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 import { getItem, setItem,getCart, setCart } from '../Utils/AsyncStorage';
-
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const ProductDetail = ({ route, navigation }) => {
@@ -10,7 +10,7 @@ const ProductDetail = ({ route, navigation }) => {
   const { product } = route.params;
   const [selectedImage, setSelectedImage] = useState(product.images[0]);
   const [quantity, setQuantity] = useState(1);
-
+   const theme = useSelector((state) => state.slice.theme); 
   const handlePress = async () => {
     const Id= await getItem('id')
     
@@ -52,7 +52,7 @@ await setCart(updatedCart);
 
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={[styles.container, { backgroundColor: theme === 'light' ? '#fff' : '#000' }]}>
       {/* Product Images */}
       <Image source={{ uri: selectedImage }} style={styles.mainImage} />
 
@@ -63,7 +63,7 @@ await setCart(updatedCart);
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => setSelectedImage(item)}>
-            <Image source={{ uri: item }} style={styles.thumbnail} />
+            <Image source={{ uri: item }} style={[styles.thumbnail, {borderColor: theme === 'light' ? 'black':'#ffff'}]} />
           </TouchableOpacity>
         )}
         style={styles.imageList}
@@ -86,29 +86,29 @@ await setCart(updatedCart);
             color={index < product.rating ? "#ffe347ff" : "#a4a39eff"}
           />
         ))}
-        <Text style={styles.reviewCount}> ({product.reviews.length} Reviews)</Text>
+        <Text style={[styles.reviewCount]}> ({product.reviews.length} Reviews)</Text>
       </View>
-      <Text style={styles.price}>${product.price.toFixed(2)*quantity}</Text>
+      <Text style={[styles.price,{color:theme=='light'?'black':'white'}]}>${product.price.toFixed(2)*quantity}</Text>
 
      
       <View style={styles.quantityContainer}>
         <TouchableOpacity
           onPress={() => setQuantity(q => Math.max(1, q - 1))}
-          style={styles.qtyButton}
+          style={[styles.qtyButton,{borderColor:theme=='light'? '#000000ff':'white'}]}
         >
-          <Text>-</Text>
+          <Text  style={{color:theme=='light'? '#060606ff':'white'}}>-</Text>
         </TouchableOpacity>
-        <Text style={styles.qtyText}>{quantity}</Text>
+        <Text style={[styles.qtyText,{color:theme=='light'? '#060606ff':'white'}]}>{quantity}</Text>
         <TouchableOpacity
           onPress={() => setQuantity(q => q + 1)}
-          style={styles.qtyButton}
+          style={[styles.qtyButton,{borderColor:theme=='light'? '#000000ff':'white'}]}
         >
-          <Text>+</Text>
+          <Text style={{color:theme=='light'? '#060606ff':'white'}}>+</Text>
         </TouchableOpacity>
       </View>
 
     
-      <TouchableOpacity style={styles.cartButton} onPress={() => handlePress()}>
+      <TouchableOpacity style={[styles.cartButton,{backgroundColor:theme=='light'?'#000':'#2b2d2eff'}]} onPress={() => handlePress()}>
         <Text style={styles.cartButtonText}>Add to Cart</Text>
       </TouchableOpacity>
 
@@ -122,10 +122,10 @@ await setCart(updatedCart);
 // onPress={()=>navigation.navigate('Cart')}
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#ffffffff', padding: 16 },
+  container: { flex: 1, padding: 16 },
   mainImage: { width: '100%', height: 390, borderRadius: 10 },
   imageList: { marginVertical: 10, },
-  thumbnail: { width: 60, height: 60, marginRight: 10, borderRadius: 8, borderWidth: 0.5, borderColor: 'black' },
+  thumbnail: { width: 60, height: 60, marginRight: 10, borderRadius: 8, borderWidth: 0.5, },
   attributes: { flexDirection: 'row', justifyContent: 'space-around', marginVertical: 10 },
   attributeBox: { borderWidth: 1, borderColor: '#ddd', padding: 8, borderRadius: 10 },
   title: { fontSize: 22, fontWeight: 'bold', marginVertical: 5 },
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
   reviewCount: { marginLeft: 5, color: '#777' },
   price: { fontSize: 22, fontWeight: 'bold', marginVertical: 5 },
   quantityContainer: { flexDirection: 'row', alignItems: 'center', marginVertical: 10 },
-  qtyButton: { padding: 10, borderWidth: 1, borderColor: '#000000ff', borderRadius: 5 },
+  qtyButton: { padding: 10, borderWidth: 1,  borderRadius: 5 },
   qtyText: { marginHorizontal: 15, fontSize: 16 },
   cartButton: { backgroundColor: '#000', padding: 15, borderRadius: 10, alignItems: 'center', marginVertical: 10 },
   cartButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },

@@ -2,16 +2,16 @@ import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getCart } from '../Utils/AsyncStorage'
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 const CartScreen = () => {
   const [cartData, setCartData] = useState([])
+  const theme = useSelector((state) => state.slice.theme); 
 
   useEffect(() => {
     const fetchCart = async () => {
       try {
-        // const res = await fetch('https://dummyjson.com/carts/user/5');
-        // const json = await res.json(); 
-
         const storedCart = (await getCart()) || [];
         setCartData(storedCart)
         console.log('mycaart', cartData)
@@ -40,80 +40,135 @@ const CartScreen = () => {
       )
     );
   };
+
   const subtotal = cartData.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping = cartData.length ? 4.99 : 0;
   const total = subtotal + shipping;
 
+  // Theme-based colors
+  const themeColors = {
+    background: theme === 'light' ? '#f8f8f8' : '#1f2020ff',
+    cardBackground: theme === 'light' ? '#ffffff' : '#2d2d2d',
+    text: theme === 'light' ? '#000000' : '#ffffff',
+    secondaryText: theme === 'light' ? '#666666' : '#aaaaaa',
+    border: theme === 'light' ? '#f0f0f0' : '#3d3d3d',
+    buttonBackground: theme === 'light' ? '#000000' : '#ffffff',
+    buttonText: theme === 'light' ? '#ffffff' : '#000000',
+    quantityBg: theme === 'light' ? '#f8f8f8' : '#3d3d3d',
+    quantityButtonBg: theme === 'light' ? '#ffffff' : '#4d4d4d',
+  };
 
   const CartItem = ({ item }) => (
-    <View style={styles.cartItem}>
+    <View style={[styles.cartItem, { 
+      backgroundColor: themeColors.cardBackground,
+      borderBottomColor: themeColors.border 
+    }]}>
       <Image
         source={{ uri: item.thumbnail }}
         style={styles.productImage}
-
       />
       <View style={styles.itemDetails}>
-        <Text style={styles.productTitle}>{item.title}</Text>
-        <Text style={styles.productPrice}>${item.price.toFixed(2)}</Text>
+        <Text style={[styles.productTitle, { color: themeColors.text }]}>
+          {item.title}
+        </Text>
+        <Text style={[styles.productPrice, { color: themeColors.text }]}>
+          ${item.price.toFixed(2)}
+        </Text>
       </View>
-      <View style={styles.quantityContainer}>
-        <TouchableOpacity style={styles.quantityButton} onPress={() => decreaseQuantity(item.id)}>
-          <Text style={styles.quantityText}>-</Text>
+      <View style={[styles.quantityContainer, { backgroundColor: themeColors.quantityBg }]}>
+        <TouchableOpacity 
+          style={[styles.quantityButton, { backgroundColor: themeColors.quantityButtonBg }]} 
+          onPress={() => decreaseQuantity(item.id)}
+        >
+          <Text style={[styles.quantityText, { color: themeColors.text }]}>-</Text>
         </TouchableOpacity>
-        <Text style={styles.quantity}>{item.quantity}</Text>
-        <TouchableOpacity style={styles.quantityButton} onPress={() => increaseQuantity(item.id)}>
-          <Text style={styles.quantityText}>+</Text>
+        <Text style={[styles.quantity, { color: themeColors.text }]}>{item.quantity}</Text>
+        <TouchableOpacity 
+          style={[styles.quantityButton, { backgroundColor: themeColors.quantityButtonBg }]} 
+          onPress={() => increaseQuantity(item.id)}
+        >
+          <Text style={[styles.quantityText, { color: themeColors.text }]}>+</Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={[styles.container, { backgroundColor: themeColors.background }]}>
 
-      <View style={styles.header}>
-        <Text style={styles.headerTitle}>Shopping Bag</Text>
-        <Text style={styles.itemCount}>{cartData.length} items</Text>
+      <View style={[styles.header, { 
+        backgroundColor: themeColors.cardBackground,
+        borderBottomColor: themeColors.border 
+      }]}>
+        <Text style={[styles.headerTitle, { color: themeColors.text }]}>
+          Shopping Bag
+        </Text>
+        <Text style={[styles.itemCount, { color: themeColors.secondaryText }]}>
+          {cartData.length} items
+        </Text>
       </View>
 
       <ScrollView style={styles.cartItems} showsVerticalScrollIndicator={false}>
         {cartData.map((item) => (
           <CartItem key={item.id} item={item} />
         ))}
-         </ScrollView>
-
-
+        
         <View style={styles.promoSection}>
-          <View style={styles.promoInput}>
-            <Text style={styles.promoText}>Picero Coals</Text>
+          <View style={[styles.promoInput, { 
+            backgroundColor: themeColors.quantityBg 
+          }]}>
+            <Text style={[styles.promoText, { color: themeColors.text }]}>
+              Picero Coals
+            </Text>
           </View>
-          <TouchableOpacity style={styles.applyButton}>
-            <Text style={styles.applyText}>Apply</Text>
+          <TouchableOpacity style={[styles.applyButton, { 
+            backgroundColor: themeColors.buttonBackground 
+          }]}>
+            <Text style={[styles.applyText, { color: themeColors.buttonText }]}>
+              Apply
+            </Text>
           </TouchableOpacity>
         </View>
-     
+      </ScrollView>
 
-
-      <View style={styles.footer}>
+      <View style={[styles.footer, { 
+        backgroundColor: themeColors.cardBackground 
+      }]}>
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Subtotal</Text>
-          <Text style={styles.summaryValue}>${subtotal.toFixed(2)}</Text>
+          <Text style={[styles.summaryLabel, { color: themeColors.secondaryText }]}>
+            Subtotal
+          </Text>
+          <Text style={[styles.summaryValue, { color: themeColors.text }]}>
+            ${subtotal.toFixed(2)}
+          </Text>
         </View>
 
         <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>Shipping</Text>
-          <Text style={styles.summaryValue}>${shipping.toFixed(2)}</Text>
+          <Text style={[styles.summaryLabel, { color: themeColors.secondaryText }]}>
+            Shipping
+          </Text>
+          <Text style={[styles.summaryValue, { color: themeColors.text }]}>
+            ${shipping.toFixed(2)}
+          </Text>
         </View>
 
-        <View style={[styles.summaryRow, styles.totalRow]}>
-          <Text style={styles.totalLabel}>Bag Total</Text>
-          <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
+        <View style={[styles.summaryRow, styles.totalRow, { 
+          borderTopColor: themeColors.border 
+        }]}>
+          <Text style={[styles.totalLabel, { color: themeColors.text }]}>
+            Bag Total
+          </Text>
+          <Text style={[styles.totalValue, { color: themeColors.text }]}>
+            ${total.toFixed(2)}
+          </Text>
         </View>
 
-
-
-        <TouchableOpacity style={styles.checkoutButton} >
-          <Text style={styles.checkoutText}>Proceed To Checkout</Text>
+        <TouchableOpacity style={[styles.checkoutButton, { 
+          backgroundColor: themeColors.buttonBackground 
+        }]} >
+          <Text style={[styles.checkoutText, { color: themeColors.buttonText }]}>
+            Proceed To Checkout
+          </Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -123,23 +178,19 @@ const CartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   header: {
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
     alignItems: 'center',
   },
   headerTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#000',
     marginBottom: 4,
   },
   itemCount: {
     fontSize: 14,
-    color: '#666',
   },
   cartItems: {
     flex: 1,
@@ -150,13 +201,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 15,
     borderBottomWidth: 1,
-    borderBottomColor: '#f8f8f8',
+    borderRadius: 10,
+    marginVertical: 5,
+    paddingHorizontal: 10,
   },
   productImage: {
     width: 60,
     height: 60,
     borderRadius: 10,
-    backgroundColor: '#f8f8f8',
   },
   itemDetails: {
     flex: 1,
@@ -165,18 +217,15 @@ const styles = StyleSheet.create({
   productTitle: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
     marginBottom: 4,
   },
   productPrice: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#000',
   },
   quantityContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f8f8f8',
     borderRadius: 20,
     padding: 5,
   },
@@ -184,7 +233,6 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#fff',
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
@@ -196,13 +244,11 @@ const styles = StyleSheet.create({
   quantityText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#000',
   },
   quantity: {
     fontSize: 16,
     fontWeight: '600',
     marginHorizontal: 15,
-    color: '#000',
   },
   promoSection: {
     flexDirection: 'row',
@@ -212,29 +258,24 @@ const styles = StyleSheet.create({
   },
   promoInput: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
     padding: 15,
     borderRadius: 10,
     marginRight: 10,
   },
   promoText: {
     fontSize: 16,
-    color: '#000',
   },
   applyButton: {
-    backgroundColor: '#000',
     paddingHorizontal: 25,
     paddingVertical: 15,
     borderRadius: 10,
   },
   applyText: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },
   footer: {
     padding: 20,
-    backgroundColor: '#f8f8f8',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },
@@ -246,38 +287,31 @@ const styles = StyleSheet.create({
   },
   summaryLabel: {
     fontSize: 16,
-    color: '#666',
   },
   summaryValue: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#000',
   },
   totalRow: {
     marginTop: 8,
     paddingTop: 12,
     borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
   },
   totalLabel: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
   },
   totalValue: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#000',
   },
   checkoutButton: {
-    backgroundColor: '#000',
     padding: 18,
     borderRadius: 12,
     alignItems: 'center',
     marginTop: 20,
   },
   checkoutText: {
-    color: '#fff',
     fontSize: 18,
     fontWeight: 'bold',
   },

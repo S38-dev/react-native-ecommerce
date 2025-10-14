@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { Image, Pressable, Text, View, ActivityIndicator } from 'react-native';
 import { nanoid } from 'nanoid/non-secure';
 import SearchBar from "../components/ProductSearchBar";
+import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import Profile from './Profile'
 const ProductListing = () => {
@@ -14,7 +15,7 @@ const ProductListing = () => {
   const [offset, setOffset] = useState(0);
   const [search,setSearch]=useState('')
   const loadingMore = useRef(true)
-
+   const theme = useSelector((state) => state.slice.theme); 
   useEffect(() => {
     const fetchProduct = async () => {
       const res = await fetch(`https://dummyjson.com/products?limit=${limit}&skip=${offset}`);
@@ -69,7 +70,7 @@ const ProductListing = () => {
 
   return (
     <SafeAreaProvider>
-      <SafeAreaView style={{ flex: 1, backgroundColor: '#D0D0D0' }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: theme === 'light' ? '#D0D0D0' : '#191818ff' }}>
         <View style={{ flexDirection: 'row', }}>
 
           <SearchBar search={search} onSearch={onSearch} />
@@ -116,7 +117,7 @@ const ProductListing = () => {
             const cardHeight = Math.floor(Math.random() * 80) + 170;
 
             return (
-              <Pressable style={{ margin: 15, borderRadius: 30, overflow: 'hidden', backgroundColor: '#ECEBF0', elevation: 4 }}
+              <Pressable style={{ margin: 15, borderRadius: 30, overflow: 'hidden', backgroundColor: theme === 'light' ?'#ECEBF0':'#121213ff', elevation: 4 }}
                 onPress={() => navigation.navigate('ProductDetails', { product: item })}
 
               >
@@ -125,13 +126,13 @@ const ProductListing = () => {
                   style={{ width: '100%', height: item.cardHeight, borderRadius: 10 }}
                 />
                 <View style={{ padding: 10 }}>
-                  <Text style={{ color: '#000', fontWeight: '800', fontSize: 16 }} numberOfLines={2}>
+                  <Text style={{ color: theme === 'light' ?'#000':'#ffff', fontWeight: '800', fontSize: 16 }} numberOfLines={2}>
                     {item.title}
                   </Text>
                   <Text style={{ color: '#969393', fontWeight: '200', fontSize: 11 }} numberOfLines={2}>
                     {item.description}
                   </Text>
-                  <Text style={{ color: '#000', fontWeight: '700', fontSize: 18 }}>${item.price}</Text>
+                  <Text style={{ color: theme === 'light' ?'#000':'#fff', fontWeight: '700', fontSize: 18 }}>${item.price}</Text>
                 </View>
               </Pressable>
             );
