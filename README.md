@@ -136,28 +136,8 @@ Combines Drawer and Stack Navigation for smooth UX
 Intuitive navigation patterns
 
 📁 Project Structure
-text
-├── App.js
-├── assets/
-│   └── images/         
-├── components/
-    |-ProtectedScreen.js
-│   ├── ProductSearchBar.js
-│   └── CustomDrawerContent.js
-    
-├── screens/
-│   ├── ProductListing.js
-│   ├── ProductDetail.js
-│   ├── Cart.js
-│   └── Profile.js
-├── Utils/
-│   ├── AsyncStorage.js
-│   ├── ApiCalls.js
-│   ├── Slice.js
-│   └── Store.js
-├── Drawer/
-│   └── ProfileDrawer.js
-└── package.json
+<img width="201" height="991" alt="image" src="https://github.com/user-attachments/assets/3758c4ce-5d01-40b2-bb2c-ec21b34b1b6c" />
+
 🏪 Redux Store
 Slices
 authSlice manages:
