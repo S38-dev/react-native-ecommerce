@@ -31,11 +31,19 @@ const ProductDetail = ({ route, navigation }) => {
    
      ToastAndroid.show('A product has been added to the Cart', ToastAndroid.SHORT);
      const data=await res.json()
+     
+
     console.log('res add cart ',data)
     const addedProduct=data.products
     const oldCart=await getCart()|| []
+    const flatOldCart = oldCart.flat();
+
+
+const updatedCart = [...addedProduct, ...flatOldCart];
+
+await setCart(updatedCart);
     console.log('oldCart',oldCart)
-    await setCart([addedProduct,...oldCart])
+  
    
 
 

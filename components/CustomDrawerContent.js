@@ -6,10 +6,10 @@ function CustomDrawerContent(props) {
     <DrawerContentScrollView {...props}>
       <View style={styles.headerContainer}>
         <Image
-          source={{ uri: 'https://i.pravatar.cc/150?img=12' }} 
+            source={require('../assets/images/dummy.jpg')}
           style={styles.profileImage}
         />
-        <Text style={styles.userName}>John Doe</Text>
+        <Text style={styles.userName}>Lina</Text>
       </View>
 
     

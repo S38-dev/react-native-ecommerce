@@ -1,18 +1,19 @@
 import MasonryList from "@react-native-seoul/masonry-list";
 import { useNavigation } from "@react-navigation/native";
-import { useEffect, useState,useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Image, Pressable, Text, View, ActivityIndicator } from 'react-native';
 import { nanoid } from 'nanoid/non-secure';
-import  SearchBar from "../components/ProductSearchBar";
-    import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-
+import SearchBar from "../components/ProductSearchBar";
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import Profile from './Profile'
 const ProductListing = () => {
   const [data, setData] = useState([]);
   const navigation = useNavigation();
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [offset, setOffset] = useState(0);
-  const loadingMore=useRef(true)
+  const [search,setSearch]=useState('')
+  const loadingMore = useRef(true)
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -24,13 +25,26 @@ const ProductListing = () => {
       const productsWithHeight = json.products.map(p => ({
         ...p,
         cardHeight: Math.floor(Math.random() * 80) + 170,
-          key: nanoid()
+        key: nanoid()
       }));
 
       setData(productsWithHeight);
     };
     fetchProduct();
   }, []);
+
+  const onSearch=async(input)=>{
+    setSearch(input)
+    const res=await fetch(`https://dummyjson.com/products/search?q=${search}`)
+       const json = await res.json();
+         const productsWithHeight = json.products.map(p => ({
+        ...p,
+        cardHeight: Math.floor(Math.random() * 80) + 170,
+        key: nanoid()
+      }));
+           setData(productsWithHeight);
+
+  }
 
   const loadMore = async () => {
 
@@ -39,99 +53,96 @@ const ProductListing = () => {
     // setOffset((page - 1) * limit)
     const off = (page - 1) * limit
 
-    setTimeout( async()=>{
-    const res = await fetch(`https://dummyjson.com/products?limit=${limit}&skip=${off}`);
-
- 
-
-
-
-
-    const json = await res.json();
-    const productsWithHeight = json.products.map(p => ({
-      ...p,
-      cardHeight: Math.floor(Math.random() * 80) + 170,
+    setTimeout(async () => {
+      const res = await fetch(`https://dummyjson.com/products?limit=${limit}&skip=${off}`);
+      const json = await res.json();
+      const productsWithHeight = json.products.map(p => ({
+        ...p,
+        cardHeight: Math.floor(Math.random() * 80) + 170,
         key: nanoid()
-    }));
-    setData((prev)=>[...prev, ...productsWithHeight]);
-       },1000)
+      }));
+      setData((prev) => [...prev, ...productsWithHeight]);
+    }, 1000)
 
 
   }
 
   return (
-<SafeAreaProvider>
-<SafeAreaView  style={{ flex: 1, backgroundColor: '#D0D0D0' }}>
-    
-     <SearchBar/>
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1, backgroundColor: '#D0D0D0' }}>
+        <View style={{ flexDirection: 'row', }}>
 
-      <MasonryList
-        data={data}
-        keyExtractor={(item, index) => item?.key}
-        numColumns={2}
-                 contentContainerStyle={{ 
-          paddingBottom: 200,
-          flexGrow: 1,
-          marginBottom:100,
-         
-        }}
+          <SearchBar search={search} onSearch={onSearch} />
+          <Profile />
+        </View>
 
+        <MasonryList
+          data={data}
+          keyExtractor={(item, index) => item?.key}
+          numColumns={2}
+          contentContainerStyle={{
+            paddingBottom: 200,
+            flexGrow: 1,
+            marginBottom: 100,
 
-         
-
-        onEndReached={() => {
-          console.log('Reached end, fetch more items!');
-          loadMore()
+          }}
 
 
-        }}
-        onEndReachedThreshold={0.2}
-            ListFooterComponent={
-         loadingMore.current ? (
-            <View className="py-4 items-center">
-              <ActivityIndicator size="small" color="white" />
-              <Text className="text-white mt-2">Loading more content...</Text>
-            </View>
-          ) :  (
-            <View className="py-4 items-center">
-              <Text className="text-gray-400">No more content to load</Text>
-            </View>
-          )
-        }
-
-        renderItem={({ item, index }) => {
 
 
-          const cardHeight = Math.floor(Math.random() * 80) + 170;
+          onEndReached={() => {
+            console.log('Reached end, fetch more items!');
+            loadMore()
 
-          return (
-            <Pressable style={{ margin: 15, borderRadius: 30, overflow: 'hidden', backgroundColor: '#ECEBF0',elevation: 4 }}
-            onPress={() => navigation.navigate('ProductDetails', { product: item })}
-            
-            >
-              <Image
-                source={{ uri: item.thumbnail }}
-                style={{ width: '100%', height: item.cardHeight, borderRadius: 10 }}
-              />
-              <View style={{ padding: 10 }}>
-                <Text style={{ color: '#000', fontWeight: '800', fontSize: 16 }} numberOfLines={2}>
-                  {item.title}
-                </Text>
-                <Text style={{ color: '#969393', fontWeight: '200', fontSize: 11 }} numberOfLines={2}>
-                  {item.description}
-                </Text>
-                <Text style={{ color: '#000', fontWeight: '700', fontSize: 18 }}>${item.price}</Text>
+
+          }}
+          onEndReachedThreshold={0.2}
+          ListFooterComponent={
+            loadingMore.current ? (
+              <View className="py-4 items-center">
+                <ActivityIndicator size="small" color="white" />
+                <Text className="text-white mt-2">Loading more content...</Text>
               </View>
-            </Pressable>
-          );
-        }
-        }
+            ) : (
+              <View className="py-4 items-center">
+                <Text className="text-gray-400">No more content to load</Text>
+              </View>
+            )
+          }
 
-      />
+          renderItem={({ item, index }) => {
 
-    </SafeAreaView>
+
+            const cardHeight = Math.floor(Math.random() * 80) + 170;
+
+            return (
+              <Pressable style={{ margin: 15, borderRadius: 30, overflow: 'hidden', backgroundColor: '#ECEBF0', elevation: 4 }}
+                onPress={() => navigation.navigate('ProductDetails', { product: item })}
+
+              >
+                <Image
+                  source={{ uri: item.thumbnail }}
+                  style={{ width: '100%', height: item.cardHeight, borderRadius: 10 }}
+                />
+                <View style={{ padding: 10 }}>
+                  <Text style={{ color: '#000', fontWeight: '800', fontSize: 16 }} numberOfLines={2}>
+                    {item.title}
+                  </Text>
+                  <Text style={{ color: '#969393', fontWeight: '200', fontSize: 11 }} numberOfLines={2}>
+                    {item.description}
+                  </Text>
+                  <Text style={{ color: '#000', fontWeight: '700', fontSize: 18 }}>${item.price}</Text>
+                </View>
+              </Pressable>
+            );
+          }
+          }
+
+        />
+
+      </SafeAreaView>
     </SafeAreaProvider>
-    
+
   );
 };
 

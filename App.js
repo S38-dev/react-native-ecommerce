@@ -12,6 +12,7 @@ import ProductDetails from './screens/ProductDetail';
 const Stack = createNativeStackNavigator();
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import store from './Utils/Store';
+import ProfileDrawer from './Drawer/ProfileDrawer'
 registerRootComponent(App);
 
 export default function App() {
@@ -21,11 +22,11 @@ export default function App() {
         <NavigationContainer>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 
-                        <Stack.Screen name='login' component={Login}/>
-                <Stack.Screen name="ProductListing" component={ProductListing} />
+                      
+                <Stack.Screen name="ProductListing" component={ProfileDrawer} />
                 <Stack.Screen name="ProductDetails" component={ProductDetails} />
                 {/* <Stack.Screen name='register' component={Register}/> */}
-               
+                 <Stack.Screen name='login' component={Login}/>
 
                 <Stack.Screen name="Cart">
                     {(props) => (
@@ -40,7 +41,7 @@ export default function App() {
                 <Stack.Screen name="Profile">
                     {(props) => (
                         <AuthWrapper>
-                            <Profile {...props} />
+                            <ProfileDrawer {...props} />
                         </AuthWrapper>
                     )}
                 </Stack.Screen>

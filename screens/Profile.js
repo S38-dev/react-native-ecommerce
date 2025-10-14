@@ -1,25 +1,21 @@
 
 import { useState } from 'react';
-import { FlatList, Image, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
-import { getItem, setItem,getCart, setCart } from '../Utils/AsyncStorage';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import CustomDrawerContent from '../components/CustomDrawerContent';
+import { FlatList, Image, ScrollView, StyleSheet, Text, ToastAndroid, TouchableOpacity, View,Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 const Profile=()=>{
-   const drawer=createDrawerNavigator()
+  const navigation=useNavigation()
     return (
-    <ProfileDrawer.Navigator
-      screenOptions={{
-        headerShown: true,
-        drawerPosition: 'right',
-        drawerStyle: {
-          backgroundColor: '#fafafa',
-          width: 240,
-        },
-      }}
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-    >
-      <ProfileDrawer.Screen name="Profile Info" component={ProfileMain} />
-      <ProfileDrawer.Screen name="Settings" component={AccountSettings} />
-    </ProfileDrawer.Navigator>
+        <Pressable style={{maxWidth:50,left:20,top:20}}
+          onPress={() => navigation.openDrawer()}
+        
+        >
+
+            <Image
+            source={require('../assets/images/dummy.jpg')}
+            style={{width:50,height:50,borderRadius:25,}}
+            />
+        </Pressable>
+  
   );
 }
+export default Profile
