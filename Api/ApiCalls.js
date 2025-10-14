@@ -17,7 +17,7 @@ export const Login=async (email,password)=>{
         const data = await res.json()
 
         console.log(data.accessToken)
-        await setItem('token', data.accessToken)
+        await setItem('token', data.accessToken,1)
         await setItem('id', data.id)
         await setItem('user',data)
 

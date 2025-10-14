@@ -32,14 +32,7 @@ const ProductListing = () => {
     if (!input) {
       dispatch(loadMoreProduct({ limit, off: 0 }));
     } else {
-    //   const res = await fetch(`https://dummyjson.com/products/search?q=${input}`);
-    //   const json = await res.json();
-    //   const productsWithHeight = json.products.map(p => ({
-    //     ...p,
-    //     cardHeight: Math.floor(Math.random() * 80) + 170,
-    //     key: nanoid(),
-    //   }));
-    //   setSearchResults(productsWithHeight);
+
      dispatch(Search({ input}));
 
     }
