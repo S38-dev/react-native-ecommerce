@@ -20,7 +20,7 @@ Screenshots
 License
 
 🎥 Demo
-Note: Add GIF or video of running app if available.
+
 
 ✨ Features
 Product Listing
@@ -136,6 +136,8 @@ Combines Drawer and Stack Navigation for smooth UX
 Intuitive navigation patterns
 
 📁 Project Structure
+
+
 <img width="201" height="991" alt="image" src="https://github.com/user-attachments/assets/3758c4ce-5d01-40b2-bb2c-ec21b34b1b6c" />
 
 🏪 Redux Store
