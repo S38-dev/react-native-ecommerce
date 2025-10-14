@@ -40,9 +40,9 @@ const ProductDetail = ({ route, navigation }) => {
         {Array.from({ length: 5 }).map((_, index) => (
           <AntDesign
             key={index}
-            name={index < Math.round(product.rating) ? 'star' : 'staro'}
+            name='star'
             size={20}
-            color="#f0c14b"
+          color={index < product.rating ? "#ffe347ff" : "#a4a39eff"}
           />
         ))}
         <Text style={styles.reviewCount}> ({product.reviews.length} Reviews)</Text>
@@ -67,13 +67,13 @@ const ProductDetail = ({ route, navigation }) => {
       </View>
 
       {/* Add to Cart */}
-      <TouchableOpacity style={styles.cartButton}>
+      <TouchableOpacity style={styles.cartButton} onPress={()=>navigation.navigate('Cart')}>
         <Text style={styles.cartButtonText}>Add to Cart</Text>
       </TouchableOpacity>
 
       {/* Product Description */}
       <Text style={styles.description}>{product.description}</Text>
-      
+
     
     </ScrollView>
   );

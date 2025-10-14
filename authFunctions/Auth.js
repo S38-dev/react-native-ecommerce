@@ -1,4 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
 import { useEffect, useState } from 'react';
 import { getItem } from '../Utils/AsyncStorage';
 
@@ -9,21 +9,23 @@ const Auth = ({ children }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
+    
       const token = await getItem('token');
-      console.log('getting token ',token)
-      if (!token) {
-        navigation.replace('login'); 
+      console.log('getting token ', token);
+
+      if (token && token !== 'undefined') {
+        setIsAuth(true);
       } else {
-        setIsAuth(true); 
+        
+        navigation.navigate('login'); 
       }
       setLoading(false);
     };
     checkAuth();
   }, []);
 
-  if (loading) return null; 
+  if (loading) return null;
 
-  return <>{isAuth && children}</>;
+  return <>{isAuth ? children : null}</>;
 };
-
-export default Auth;
+export default Auth

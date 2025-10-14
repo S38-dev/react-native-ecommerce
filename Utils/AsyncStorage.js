@@ -1,28 +1,41 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Save a value
-export const setItem = async (key, value) => {
-  console.log('running setItem')
+
+export const setItem = async (key, value, expireInMs = null) => {
+  console.log('running setItem');
   try {
-    await AsyncStorage.setItem(key, JSON.stringify(value));
+    const item = {
+      value,
+      expiry: expireInMs ? Date.now() + expireInMs : null,
+    };
+    await AsyncStorage.setItem(key, JSON.stringify(item));
   } catch (error) {
     console.error('Error saving data', error);
   }
 };
 
-// Get a value
+
 export const getItem = async (key) => {
   try {
-    const value = await AsyncStorage.getItem(key);
-    return value != null ? JSON.parse(value) : null;
+    const itemStr = await AsyncStorage.getItem(key);
+    if (!itemStr) return null;
+
+    const item = JSON.parse(itemStr);
+
+    if (item.expiry && Date.now() > item.expiry) {
+      await removeItem(key); 
+      return null;
+    }
+
+    return item.value;
   } catch (error) {
     console.error('Error reading data', error);
     return null;
   }
 };
 
-// Remove a value
+
 export const removeItem = async (key) => {
   try {
     await AsyncStorage.removeItem(key);

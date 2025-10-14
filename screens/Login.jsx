@@ -12,7 +12,7 @@ const Login = ({ navigation }) => {
     alert('Login pressed');
     const credentials = { username: username, password: password };
     dispatch(loginUser({email,password}))
-    // navigation.navigate('Home');
+   navigation.goBack()
   };
 
   return (
