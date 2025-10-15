@@ -1,6 +1,7 @@
 📋 Table of Contents
-Demo
 
+login (if needed)
+Demo
 Features
 
 Tech Stack
@@ -18,6 +19,12 @@ API Integration
 Screenshots
 
 License
+
+
+🔗login
+
+username: emilys
+ password: emilyspass
 
 🎥 Demo
 
