@@ -4,24 +4,25 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { getCart } from '../Utils/AsyncStorage'
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import { useFocusEffect } from '@react-navigation/native'
 const CartScreen = () => {
   const [cartData, setCartData] = useState([])
   const theme = useSelector((state) => state.slice.theme); 
 
-  useEffect(() => {
+useFocusEffect(
+  React.useCallback(() => {
     const fetchCart = async () => {
       try {
         const storedCart = (await getCart()) || [];
-        setCartData(storedCart)
-        console.log('mycaart', cartData)
+        setCartData(storedCart);
       } catch (err) {
         console.error('Error fetching cart:', err);
       }
     };
-
     fetchCart();
-  }, []);
+  }, [])
+);
+
 
   const increaseQuantity = (id) => {
     setCartData(prevCart =>
@@ -45,7 +46,7 @@ const CartScreen = () => {
   const shipping = cartData.length ? 4.99 : 0;
   const total = subtotal + shipping;
 
-  // Theme-based colors
+
   const themeColors = {
     background: theme === 'light' ? '#f8f8f8' : '#1f2020ff',
     cardBackground: theme === 'light' ? '#ffffff' : '#2d2d2d',
@@ -112,6 +113,7 @@ const CartScreen = () => {
         {cartData.map((item) => (
           <CartItem key={item.id} item={item} />
         ))}
+         </ScrollView>
         
         <View style={styles.promoSection}>
           <View style={[styles.promoInput, { 
@@ -129,7 +131,7 @@ const CartScreen = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      </ScrollView>
+     
 
       <View style={[styles.footer, { 
         backgroundColor: themeColors.cardBackground 
