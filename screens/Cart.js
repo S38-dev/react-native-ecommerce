@@ -115,24 +115,7 @@ useFocusEffect(
         ))}
          </ScrollView>
         
-        <View style={styles.promoSection}>
-          <View style={[styles.promoInput, { 
-            backgroundColor: themeColors.quantityBg 
-          }]}>
-            <Text style={[styles.promoText, { color: themeColors.text }]}>
-              Picero Coals
-            </Text>
-          </View>
-          <TouchableOpacity style={[styles.applyButton, { 
-            backgroundColor: themeColors.buttonBackground 
-          }]}>
-            <Text style={[styles.applyText, { color: themeColors.buttonText }]}>
-              Apply
-            </Text>
-          </TouchableOpacity>
-        </View>
-     
-
+       
       <View style={[styles.footer, { 
         backgroundColor: themeColors.cardBackground 
       }]}>
